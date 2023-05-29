@@ -65,11 +65,24 @@ const Header = () => {
                   </NavLink>
                 </li>
                 </>) : (<>
-                  <li className="nav-item">
-                  <NavLink  to="/login" className="nav-link" onClick={handleLogout} >
-                    Logout
-                  </NavLink>
-                </li>
+                    <li>
+                        <NavLink
+                          onClick={handleLogout}
+                          to="/login"
+                          className="nav-link"
+                        >
+                          Logout
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink
+                          
+                          to={`/dashboard/${token?.user?.role === 1 ? 'admin' : 'user'}`}
+                          className="nav-link"
+                        >
+                          Dashboard
+                        </NavLink>
+                    </li>
                 </>)
               }
               <li className="nav-item">

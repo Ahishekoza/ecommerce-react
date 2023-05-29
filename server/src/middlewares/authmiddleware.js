@@ -1,6 +1,7 @@
 import jwt_token from "jsonwebtoken";
+import user from '../models/user.js'
 
-const requireSignIn = (req,res,next) =>{
+export const requireSignIn = (req,res,next) =>{
 
     try {
         const secretKey = "secretkey"
@@ -16,4 +17,24 @@ const requireSignIn = (req,res,next) =>{
 }
 
 
-export default requireSignIn
+
+export const isAdmin = async(req, res, next) =>{
+
+    
+    try{
+        await  user.findOne(req.user._id).then((user) =>{
+            if(user.role !==1){
+                return res.status(403).json({message:'User is not authorized'})
+            }
+            else{
+                next()
+            }
+        })
+    }
+    catch(error) {
+        return res.status(403).json({
+            message:'Error while getting user'
+        })
+    }
+
+}
