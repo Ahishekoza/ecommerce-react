@@ -4,9 +4,12 @@ import axios from 'axios'
 import { Outlet } from 'react-router-dom'
 import Spinner from '../Spinner'
 
+
+// @TODO a normal user with role can access the admin dashboard functionality that we had passed is not wroking currently
 const Adminroute = () => {
   
     const [ok,setOk] = useState(false)
+    // eslint-disable-next-line
     const [token,setToken] = useAuth()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -14,8 +17,12 @@ const Adminroute = () => {
        const authCheck = async () => 
        {
         await axios.get(`${process.env.REACT_APP_API}admin-auth`).then((response)=>{
+            console.log(response)
             if(response.data.ok){
                 setOk(true)
+            }
+            else{
+                setOk(false)
             }
            
         }) 
@@ -28,7 +35,7 @@ const Adminroute = () => {
     },[token?.token])
 
 
-    return ok ? <Outlet/> : <Spinner/>
+    return ok ? <Outlet/> : <Spinner path=""/>
 
 }
 

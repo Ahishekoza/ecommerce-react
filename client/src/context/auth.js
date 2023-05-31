@@ -8,6 +8,9 @@ const AuthContextProvider = (props) =>{
         user: null
     })
 
+
+    
+
     axios.defaults.headers.common['Authorization'] = token?.token
     
     useEffect(()=>{

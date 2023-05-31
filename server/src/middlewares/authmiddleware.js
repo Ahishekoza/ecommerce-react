@@ -23,6 +23,7 @@ export const isAdmin = async(req, res, next) =>{
     
     try{
         await  user.findOne(req.user._id).then((user) =>{
+            console.log(user)
             if(user.role !==1){
                 return res.status(403).json({message:'User is not authorized'})
             }
