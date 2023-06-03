@@ -17,7 +17,6 @@ const Adminroute = () => {
        const authCheck = async () => 
        {
         await axios.get(`${process.env.REACT_APP_API}admin-auth`).then((response)=>{
-            console.log(response)
             if(response.data.ok){
                 setOk(true)
             }

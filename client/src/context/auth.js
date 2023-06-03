@@ -12,6 +12,7 @@ const AuthContextProvider = (props) =>{
     
 
     axios.defaults.headers.common['Authorization'] = token?.token
+    axios.defaults.headers.common['Content-Type'] = 'application/json'
     
     useEffect(()=>{
         const data = localStorage.getItem('auth')

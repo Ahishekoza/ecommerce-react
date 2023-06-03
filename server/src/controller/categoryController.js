@@ -17,7 +17,7 @@ export const createCategory = async(req,res)=>{
     const existing = await category.findOne({name: name})
 
     if(existing){
-        return response.status(200).json({
+        return res.status(200).json({
             success: true,
             message:'Category already present'
         });
@@ -40,13 +40,17 @@ export const createCategory = async(req,res)=>{
 //  Update Category
 export const updateCategory = async(req,res) => {
     
-    const {name,newName} = req.body
-
-    await category.findOne({name:name}).then(async(reponse)=>{
-        await category.findByIdAndUpdate(reponse._id, {name:newName,slug:slugify(newName)}).then((updated)=>{
+    const {name} = req.body
+    const { Id } = req.params
+    
+        await category.findByIdAndUpdate(Id, 
+            {name,slug:slugify(name)},
+            {new: true}
+            ).then((updated)=>{
             return res.status(200).json({
                 success: true,
                 message: "category updated successfully",
+                updateCategory: updated
             })
         }).catch((err)=>{
             return res.status(500).json({
@@ -54,12 +58,6 @@ export const updateCategory = async(req,res) => {
                 message: err.message
             })
         });
-    }).catch((err)=>{
-        return res.status(403).json({
-            message: `Unable to find a category ${err.message}`
-        })
-    });
-
 }
 
 // Get All Categories
@@ -81,7 +79,7 @@ export const getAllCategories = async(req,res) => {
 // Getting a single category
 export const getSingleCategory = async(req, res) => {
 
-    const {slug} =  req.body
+    const {slug} =  req.params
 
     await category.findOne({slug:slug}).then((response)=>{
         return res.status(200).json({
@@ -102,9 +100,9 @@ export const getSingleCategory = async(req, res) => {
 
 export const deleteCategory = async(req,res) => {
 
-    const {name} =  req.body
+    const {Id} =  req.params
 
-    await category.deleteOne({name: name}).then((response)=>{
+    await category.findByIdAndDelete(Id).then((response)=>{
         return res.status(200).json({
             success:true,
             message: "category deleted successfully",

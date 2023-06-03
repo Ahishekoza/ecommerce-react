@@ -7,12 +7,12 @@ import { createCategory,updateCategory,getAllCategories,getSingleCategory,delete
 
 router.post('/admin/create-category', requireSignIn, isAdmin,createCategory)
 
-router.put('/admin/update-category', requireSignIn, isAdmin,updateCategory)
+router.put('/admin/update-category/:Id', requireSignIn, isAdmin, updateCategory)
 
 router.get('/All-Categories',getAllCategories)
 
 router.post('/Single-Category',getSingleCategory)
 
-router.post('/admin/deleteCategory',requireSignIn , isAdmin, deleteCategory)
+router.delete('/admin/deleteCategory/:Id',requireSignIn , isAdmin, deleteCategory)
 
 export default router 
