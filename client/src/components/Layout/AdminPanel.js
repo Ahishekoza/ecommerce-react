@@ -8,10 +8,11 @@ const AdminPanel = () => {
   return (
     <>
     <div className="list-group">
-        <NavLink to={`${commonRoute}create-category`} className="list-group-item ">
+        <NavLink to={`${commonRoute}create-category`} className="list-group-item list-group-item-action">
             Create Category
         </NavLink>
         <NavLink to={`${commonRoute}create-product`} className="list-group-item list-group-item-action">Create product</NavLink>
+        <NavLink to={`${commonRoute}products`} className="list-group-item list-group-item-action">Products</NavLink>
         <NavLink to={`${commonRoute}users`} className="list-group-item list-group-item-action">Users</NavLink>
     </div>
 

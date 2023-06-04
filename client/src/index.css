@@ -78,3 +78,10 @@ background: linear-gradient(90deg, rgba(2,0,36,1) 6%, rgba(50,74,102,0.972514005
 .Link:hover{
   color: rgb(93, 93, 199) ;
 }
+
+
+/* ----Product-update-link */
+.product-update-link{
+  text-decoration: none;
+  color: black;
+}

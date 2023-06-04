@@ -94,10 +94,9 @@ export const getSinglePhoto =async (req, res) => {
   await product.findById(productId).select('photo').then((product)=>{
     if(product.photo.data){
       res.set('Content-Type', product.photo.contentType)
-      return res.status(200).json({
-        success: true,
-        photo: product.photo.data
-      })
+      // --- use send not json to send photo as we are gone access photo directly 
+      return res.status(200).send(product.photo.data
+      )
     }
   }).catch((error)=>{
     return res.status(500).json({
@@ -129,14 +128,13 @@ export const deleteProduct = async(req, res) => {
 
 
 // update product
-export const updateProduct = async(req,res) =>{
-    
-  const {name,description,price,category,quantity,shippingAddress} = req.fields
-
-  const {photo} = req.files
-
-
-  switch (true) {
+export const updateProduct = async (req, res) => {
+  try {
+    const { name, description, price, category, quantity, shippingAddress } =
+      req.fields;
+    const { photo } = req.files;
+    //alidation
+    switch (true) {
       case !name:
         return res.status(500).send({ error: "Name is Required" });
       case !description:
@@ -153,25 +151,51 @@ export const updateProduct = async(req,res) =>{
         return res
           .status(500)
           .send({ error: "photo is Required and should be less then 1mb" });
-  }
+    }
 
-  
-  
-
-  const products = await product.findByIdAndUpdate(
-    req.params.productId,
-    { ...req.fields, slug: slugify(name) },
-    { new: true }
-  );
-  if (photo) {
-    products.photo.data = fs.readFileSync(photo.path);
-    products.photo.contentType = photo.type;
+    const products = await product.findByIdAndUpdate(
+      req.params.productId,
+      { ...req.fields, slug: slugify(name) },
+      { new: true }
+    );
+    if (photo) {
+      products.photo.data = fs.readFileSync(photo.path);
+      products.photo.contentType = photo.type;
+    }
+    await products.save();
+    res.status(201).send({
+      success: true,
+      message: "Product Updated Successfully",
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error in Updte product",
+    });
   }
-  await products.save()
-  res.status(200).json({
-    success: true,
-    message: "Product Updated Successfully",
-    updateProduct: products,
+};
+
+
+export const productFiltersController = async(req,res) => {
+
+  const { checked,radio } = req.body
+  let args={}
+  if(checked.length>0) args.category = checked
+  if(radio.length) args.price = { $gte : radio[0] , $lte : radio[1] }
+
+  await product.find(args).then((response)=>{
+    return res.status(200).json({
+      success:true,
+      products : response
+    })
+  }).catch((error)=>{
+    return res.status(404).json({
+      success:false,
+      message:'Failed to find the products for mentioned filters'
+    })
   })
 
 }
