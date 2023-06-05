@@ -199,3 +199,40 @@ export const productFiltersController = async(req,res) => {
   })
 
 }
+
+export const productCountControllers =async(req,res) =>{
+
+  await product.find().estimatedDocumentCount().then((count)=>{
+    return res.status(200).json({
+      success: true,
+      productCount: count
+    })
+  }).catch((err)=>{
+    return res.status(500).json({
+      success: false,
+      message: err.message
+    })
+  })
+
+}
+
+export const productsPerPage = async(req, res) =>{
+  const perPage = 3
+  const page = req.params.page ? req.params.page : 1
+  await product.find()
+  .select('-photo')
+  .skip((page - 1)*perPage)
+  .limit(perPage)
+  .sort({createdAt: -1})
+  .then((response)=>{
+    return res.status(200).json({
+      success:true,
+      products:response
+    })
+  }).catch((err)=>{
+    return res.status(500).json({
+      success: false,
+      message: err.message
+    })
+  }); 
+}

@@ -1,7 +1,17 @@
 import express from "express";
 const router =  express.Router();
 import { requireSignIn,isAdmin } from "../middlewares/authmiddleware.js";
-import { createProduct, getAllProducts,getSingleProduct,getSinglePhoto ,deleteProduct,updateProduct,productFiltersController} from "../controller/productController.js";
+import { 
+    createProduct, 
+    getAllProducts,
+    getSingleProduct,
+    getSinglePhoto ,
+    deleteProduct,
+    updateProduct,
+    productFiltersController,
+    productCountControllers,
+    productsPerPage
+} from "../controller/productController.js";
 import formidable from 'express-formidable'
 
 // create product
@@ -26,5 +36,11 @@ router.put('/admin/update-product/:productId', requireSignIn , isAdmin , formida
 // ProductFilters
 
 router.post('/product-filters',productFiltersController)
+
+// --product Count
+router.get('/product-count', productCountControllers)
+
+// ---product Per Page
+router.get('/product-per-page/:page', productsPerPage)
 export default router
 
