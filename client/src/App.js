@@ -19,6 +19,7 @@ import Profile  from './pages/User/Profile'
 import Orders  from './pages/User/Orders'
 import Products from './pages/Admin/Products.js'
 import UpdateProduct from './pages/Admin/UpdateProduct';
+import SearchedProduct from './pages/SearchedProduct';
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
       <Route path='/register' element={<Register/>}/>
       <Route path='/login' element={<Login/>} />
       <Route path='/forgotPassword' element={<Forgotpassword/>} />
+      <Route path='/searchedProducts' element={<SearchedProduct/>} />
       <Route path='/dashboard' element={<PrivateRoute/>}>
         <Route path='user' element={<Dashboard/>} />
         <Route path='user/profile' element={<Profile/>} />

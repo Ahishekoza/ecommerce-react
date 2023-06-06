@@ -38,7 +38,7 @@ const Products = () => {
         <div className='col-md-9'>
           <h1 className='text-center'>All Products</h1>
 
-         <div className='d-flex gap-2'>
+         <div className='d-flex flex-wrap gap-2'>
          {
           products.map((p) => (
             

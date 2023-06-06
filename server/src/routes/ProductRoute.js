@@ -10,7 +10,8 @@ import {
     updateProduct,
     productFiltersController,
     productCountControllers,
-    productsPerPage
+    productsPerPage,
+    searchByKeyword
 } from "../controller/productController.js";
 import formidable from 'express-formidable'
 
@@ -42,5 +43,9 @@ router.get('/product-count', productCountControllers)
 
 // ---product Per Page
 router.get('/product-per-page/:page', productsPerPage)
+
+// --getting product using search bar
+router.post('/product-search',searchByKeyword)
+
 export default router
 

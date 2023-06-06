@@ -236,3 +236,25 @@ export const productsPerPage = async(req, res) =>{
     })
   }); 
 }
+
+export const searchByKeyword =async(req,res)=>{
+
+  const {keyword} = req.body;
+  await product.find({
+    $or:[
+      { name :{$regex:keyword,$options:"i"}},
+      { description:{$regex:keyword,$options:"i"}}
+    ]
+  }).select('-photo').then((response)=>{
+    return res.status(200).json({
+      success:true,
+      productsList:response
+    })
+  }).catch((error)=>{
+    return res.status(500).json({
+      success:false,
+      message:"Unable to retrieve products"
+    })
+  })
+
+}

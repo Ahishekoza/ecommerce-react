@@ -11,8 +11,10 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom'
-
+import { SearchProvider } from './context/searchContext';
 import { AuthContextProvider } from './context/auth';
+
+
 
 
 // antd Auth
@@ -21,9 +23,11 @@ import 'antd/dist/reset.css';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <AuthContextProvider>
-  <BrowserRouter>
+  <SearchProvider>
+   <BrowserRouter>
       <App />
-  </BrowserRouter>
+   </BrowserRouter>
+  </SearchProvider>
   </AuthContextProvider>
 );
 
