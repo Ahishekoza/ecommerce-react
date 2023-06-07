@@ -1,8 +1,11 @@
 import React from 'react'
 import Layout from '../components/Layout/Layout'
 import { useSearch } from '../context/searchContext'
+import ProductCard from '../components/Layout/ProductCard'
+
 const SearchedProduct = () => {
 
+  // eslint-disable-next-line 
     const [values,setValues]=  useSearch()
 
 
@@ -17,18 +20,7 @@ const SearchedProduct = () => {
             <div className='d-flex flex-wrap gap-2'>
             {
               values.results.map((p)=>(
-                <div className='card ' style={{width:'18rem'}} key={p._id}>
-              <img src={`${process.env.REACT_APP_API}get-photo/${p._id}`} alt={p.name} className='card-img-top'></img>
-              <div className='card-body'>
-                <h5 className='card-title'>{p.name}</h5>
-                <p className='card-text'>{p.description}</p>
-                <p className='card-text'>$ {p.price}</p>
-                <div className='d-flex'>
-                <button className='btn btn-primary ms-2'>Add To Cart</button>
-                <button className='btn btn-secondary ms-2' >Know More</button>
-                </div>
-              </div>
-            </div>
+                <ProductCard _id={p._id} name={p.name} description={p.description} price={p.price} slug={p.slug}/>
               ))
             }
             </div>
