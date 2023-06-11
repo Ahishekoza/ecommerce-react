@@ -1,33 +1,30 @@
 // ----- Bootstrap cdn
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min';
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import "../node_modules/bootstrap/dist/js/bootstrap.bundle.min";
 
-
-
-
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom'
-import { SearchProvider } from './context/searchContext';
-import { AuthContextProvider } from './context/auth';
-
-
-
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter } from "react-router-dom";
+import { SearchProvider } from "./context/searchContext";
+import { AuthContextProvider } from "./context/auth";
 
 // antd Auth
-import 'antd/dist/reset.css';
+import "antd/dist/reset.css";
+import { CartProvider } from "./context/cartContext";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <AuthContextProvider>
-  <SearchProvider>
-   <BrowserRouter>
-      <App />
-   </BrowserRouter>
-  </SearchProvider>
+    <CartProvider>
+      <SearchProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </SearchProvider>
+    </CartProvider>
   </AuthContextProvider>
 );
 

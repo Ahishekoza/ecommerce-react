@@ -11,7 +11,7 @@ router.put('/admin/update-category/:Id', requireSignIn, isAdmin, updateCategory)
 
 router.get('/All-Categories',getAllCategories)
 
-router.post('/Single-Category',getSingleCategory)
+router.get('/Single-Category/:slug',getSingleCategory)
 
 router.delete('/admin/deleteCategory/:Id',requireSignIn , isAdmin, deleteCategory)
 

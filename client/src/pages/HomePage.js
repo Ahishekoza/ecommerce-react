@@ -190,7 +190,7 @@ const HomePage = () => {
             {
               products.map((p)=>(
                 // --- reusable Product Component
-                <ProductCard _id={p._id} name={p.name} description={p.description} price={p.price} slug={p.slug}/>
+                <ProductCard _id={p._id} name={p.name} description={p.description} price={p.price} slug={p.slug} p={p} width={"18rem"}/>
               ))
             }
             </div>

@@ -1,6 +1,17 @@
 import product from "../models/product.js";
 import slugify from "slugify";
 import fs from 'fs'
+import braintree from "braintree"
+import order from "../models/orders.js"
+
+
+var gateway = new braintree.BraintreeGateway({
+  environment: braintree.Environment.Sandbox,
+  merchantId: "jf3yrp67fpq6xswr",
+  publicKey: "f8cczrwxrhz7btph",
+  privateKey: "57666c9b294b27f48250c7ab07842937",
+});
+
 
 export const createProduct = async(req,res) =>{
     
@@ -52,7 +63,7 @@ export const createProduct = async(req,res) =>{
 
 // Get a single product
 export const getSingleProduct =async(req,res) => {
-  await product.findOne({slug: req.params.slug}).select('-photo').then((product) => {
+  await product.findOne({slug: req.params.slug}).select('-photo').populate('category').then((product) => {
     if(product){
       return res.status(200).json({
         success: true,
@@ -258,3 +269,93 @@ export const searchByKeyword =async(req,res)=>{
   })
 
 }
+
+export const getSimilarProducts=async(req,res)=>{
+
+  const { productId, categoryId} = req.params
+
+  await product.find({
+    category: categoryId,
+    _id:{$ne:productId}
+  }).select('-photo').populate('category').limit(3).then((response)=>{
+
+    return res.status(200).json({
+      success:true,
+      relatedProducts: response
+    })
+
+  }).catch((error)=>{
+    return res.status(404).json({
+      success:false,
+      message:`Related products could not be found ${error.message}`
+    })
+  })
+}
+
+
+export const getProductsOnCategories =async(req,res)=>{
+  const {categoryId} = req.params
+
+  await product.find({category: categoryId}).select('-photo').populate('category').then((products)=>{
+    return res.status(200).json({
+      success:true,
+      products:products
+    })
+    }).catch((error)=>{
+      return res.status(404).json({
+        success:false,
+        message:`Unable to find product for the category ${categoryId} ${error.message}`
+      })
+  })
+
+}
+
+export const braintreeTokenController = (req,res) =>{
+  gateway.clientToken.generate({},(err,response)=>{
+    if(err){
+      return res.status(404).json({
+        success:false,
+        message:`Unable to generate Token: ${err.message}`
+      })
+    }
+    else{
+      return res.status(200).json({
+        success:true,
+        PaymentToken:response
+      })
+    }
+  })
+}
+
+export const braintreePaymentController = async (req, res) => {
+  try {
+    const { nonce, cart } = req.body;
+    let total = 0;
+    cart.map((i) => {
+      total += i.price;
+    });
+    let newTransaction = gateway.transaction.sale(
+      {
+        amount: total,
+        paymentMethodNonce: nonce,
+        options: {
+          submitForSettlement: true,
+        },
+      },
+      function (error, result) {
+        if (result) {
+          const orders = new order({
+            products: cart,
+            payment: result,
+            buyer: req.user._id,
+          }).save();
+          res.json({ ok: true });
+        } else {
+          res.status(500).send(error);
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -1,4 +1,5 @@
 import user from '../models/user.js'
+import orders from '../models/orders.js'
 import { comparePassword, hashPassword } from '../helper/bcrypt.js'
 import jwt_token from 'jsonwebtoken'
 
@@ -171,5 +172,25 @@ export const forgotPassword = async(req,res) =>{
         })
     })
     
+
+}
+
+
+export const getUsersOrder = async(req,res)=>{
+    
+    await orders.find({buyer:req.user._id})
+    .populate('products','-photo')
+    .populate('buyer','name')
+    .then((response)=>{
+        return res.status(200).json({
+            success:true,
+            orders:response
+        })
+    }) .catch((err)=>{
+        return res.status(500).json({
+            success:false,
+            message:`Unable to Fetch Orders `
+        })
+    })
 
 }

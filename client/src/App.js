@@ -21,6 +21,8 @@ import Products from './pages/Admin/Products.js'
 import UpdateProduct from './pages/Admin/UpdateProduct';
 import SearchedProduct from './pages/SearchedProduct';
 import ProductDetails from './pages/ProductDetails';
+import Categories from './pages/Categories';
+import Cart from './pages/Cart';
 
 
 function App() {
@@ -30,8 +32,10 @@ function App() {
       <Route path='/register' element={<Register/>}/>
       <Route path='/login' element={<Login/>} />
       <Route path='/forgotPassword' element={<Forgotpassword/>} />
+      <Route path='/category' element={<Categories/>} />
       <Route path='/searchedProducts' element={<SearchedProduct/>} />
       <Route path='/product-Details/:slug' element={<ProductDetails/>} />
+      <Route path="/cart" element={<Cart/>}/>
       <Route path='/dashboard' element={<PrivateRoute/>}>
         <Route path='user' element={<Dashboard/>} />
         <Route path='user/profile' element={<Profile/>} />
